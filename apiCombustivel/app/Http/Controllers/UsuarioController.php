@@ -43,6 +43,12 @@ class UsuarioController extends Controller
         $usuario->nome = $us['nome'];
         $usuario->email = $us['email'];
         $usuario->senha = $us['senha'];
+
+        $usuarioExiste = Usuario::where('email', $us['email'])->First();
+
+        if ($usuarioExiste) {
+            return response('Já existe um usuário com esse email registrado.', 400);
+        }
         
         $confirmarSenha = $us['confirmarSenha'];
         
@@ -63,9 +69,10 @@ class UsuarioController extends Controller
      * @param  \App\Models\Usuario  $usuario
      * @return \Illuminate\Http\Response
      */
-    public function show(Usuario $usuario)
+    public function show(int $usuario_id)
     {
         //
+        return Usuario::with('carros')->find($usuario_id);
     }
 
     /**
